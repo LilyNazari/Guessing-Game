@@ -1,1 +1,46 @@
-Write a readme!
+Wordle Game in Streamlit
+This is a simple implementation of a Wordle Game using Streamlit. The goal of the game is to guess a randomly selected word from a predefined list within a given time limit and number of attempts.
+
+Features
+Random Word Selection: The game randomly selects a word from the Brown corpus with a word length between 3 to 6 letters.
+Difficulty Levels: Choose from three difficulty levels (easy, medium, hard) that affect the time limit and scoring.
+Time and Attempts: Players have a limited number of attempts and time based on the difficulty mode and the word length.
+Guess Evaluation: Displays common letters between the guess and the correct answer.
+Game History: Game data, including scores and attempts, is saved in a game_history.json file.
+Stats Dashboard: Displays statistics such as winning rate, best score, and average score, as well as a bar chart of scores and a line chart of attempts.
+
+
+Stats
+The stats page displays:
+Winning Rate: The percentage of games won.
+Best Score: The highest score achieved in a game.
+Average Score: The average score of all games played.
+Scores: A bar chart showing scores for each game.
+Attempts: A line chart displaying the number of attempts for each game.
+
+
+How to Play
+The game presents a word with a specific length, and the player needs to guess the word within the allowed attempts and time limit.
+Players enter their guesses in an input box and can receive feedback on whether their guess contains any common letters with the correct word.
+After guessing, the score is calculated based on the difficulty mode, and the game progresses until the player either guesses correctly or runs out of attempts or time.
+
+
+Settings
+Difficulty Mode: Choose between easy, medium, or hard, which affects the time and score calculation.
+Theme: Toggle between Light Mode and Dark Mode for the app's interface.
+
+
+Game Flow
+Start Game: A new game can be started by clicking the "New Game" button, resetting the game state and session.
+Timer: The remaining time is displayed on the screen, counting down until it hits zero or the player guesses the correct word.
+Game Over: If the player guesses the word or runs out of attempts, the game ends and is recorded in the game history.
+
+
+Setup
+Example UI:
+Game Tab: Where you play the game by guessing the word and see the real-time score and remaining time.
+Stats Tab: View your winning rate, best score, average score, and attempt data visualized in charts.
+Settings Tab: Customize the difficulty mode and theme (light/dark).
+Save and Load History
+Game results (scores, attempts, and whether the game was won) are stored in a game_history.json file.
+History is loaded at the start of the game, and new results are appended to this file after each game.
