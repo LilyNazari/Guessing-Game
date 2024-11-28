@@ -19,6 +19,7 @@ def initialize_game_state():
             st.session_state.random_word = random_word  # Store the random word in session state
             st.session_state.word_length = word_length    # Store the word length
             st.session_state.remaining_attempts = word_length + 1  # Limit the number of allowed attempts
+            st.session_state.total_attempts = word_length + 1
             st.session_state.guesses = []  # Track all guesses
             st.session_state.remaining_time = 30 * word_length  # Default time for "easy" mode
             st.session_state.start_time = time.time()
@@ -33,6 +34,7 @@ if "random_word" not in st.session_state:
 answer = st.session_state.random_word
 word_length = st.session_state.word_length
 remaining_attempts = st.session_state.remaining_attempts
+total_attempts = st.session_state.total_attempts
 remaining_time = st.session_state.remaining_time
 time_limit = st.session_state.remaining_time
 score= st.session_state.score    
@@ -149,7 +151,7 @@ with tab1:
                     calculate_score()
                     st.success(f"Congratulations! You guessed the correct word! Your score: {st.session_state.score}")
                     st.session_state.game_over = True
-                    st.session_state.game_history.append({ "score": st.session_state.score, "won": st.session_state.score > 0})   
+                    st.session_state.game_history.append({ "score": st.session_state.score, "won": st.session_state.score > 0, "attempt" : st.session_state.total_attempts - st.session_state.remaining_attempts})   
                     save_history(st.session_state.game_history)
                 elif (not all(item.isalpha() for item in guess)) or len(guess) != word_length:  #Entry validation
                     st.warning("Please enter a valid guess.")
@@ -171,7 +173,7 @@ with tab1:
         else:    #Calculating the score and saving the results for the lost games
             st.error(f" No attempts left! Game over. The correct word was: {answer}")
             st.session_state.game_over = True
-            st.session_state.game_history.append({ "score": st.session_state.score, "won": st.session_state.score > 0})
+            st.session_state.game_history.append({ "score": st.session_state.score, "won": st.session_state.score > 0, "attempt" : st.session_state.total_attempts - st.session_state.remaining_attempts})
             save_history(st.session_state.game_history)
 
         
@@ -213,7 +215,7 @@ with tab1:
         score == 0
         st.session_state.game_over = True
         st.error(f"Time's up! Game over. The correct word was: {answer}")
-        st.session_state.game_history.append({ "score": st.session_state.score, "won": st.session_state.score > 0})
+        st.session_state.game_history.append({ "score": st.session_state.score, "won": st.session_state.score > 0, "attempt" : st.session_state.total_attempts - st.session_state.remaining_attempts})
         save_history(st.session_state.game_history)
         
 
@@ -225,26 +227,36 @@ with tab2:
     
 
 
-    # Ensure there's at least one game played before displaying stats
+    # Making sure that there's at least one game played before displaying stats
     if st.session_state.game_history:
         # 1. Winning Rate
         won_games = sum(1 for game in st.session_state.game_history if game["won"])
         lost_games = len(st.session_state.game_history) - won_games
-        winning_rate = (won_games / max(lost_games, 1)) * 100  # Avoid division by zero
+        total_games = len(st.session_state.game_history)
+        winning_rate = (won_games / max(total_games, 1)) * 100  
         st.write(f"Winning Rate: **{winning_rate:.2f}%**")
 
         # 2. Best Score
-        #best_score = max(game["score"] for game in st.session_state.game_history)
-        #st.write(f"Best Score: **{best_score}**")
+        best_score = max(game["score"] for game in st.session_state.game_history)
+        st.write(f"Best Score: **{best_score}**")
 
         # 3. Average Score
-        #total_score = sum(game["score"] for game in st.session_state.game_history)
-        #avg_score = total_score / len(st.session_state.game_history)
-        #st.write(f"Average Score: **{avg_score:.2f}**")
+        total_score = sum(game["score"] for game in st.session_state.game_history)
+        avg_score = total_score / len(st.session_state.game_history)
+        st.write(f"Average Score: **{avg_score:.2f}**")
 
         # 4. Bar Chart of Scores
-        #scores = [game["score"] for game in st.session_state.game_history]
-        #st.bar_chart(scores)
+        scores = [game["score"] for game in st.session_state.game_history]
+        st.bar_chart(scores)
+
+        # 5. Average attempt
+        
+        attempts = [game.get("attempt",0) for game in st.session_state.game_history] 
+        sum_attempts = sum(attempts)
+        avg_attempts = sum_attempts  / len(st.session_state.game_history)
+        st.write(f"Average attempts: **{avg_attempts:.2f}**")
+        st.line_chart(attempts)
+
     else:
         st.write("No games played yet. Play a game to see your stats!")
     
