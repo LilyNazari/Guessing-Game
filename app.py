@@ -126,7 +126,7 @@ with tab1:
         - You can request hints, but each hint costs one guess!             
     ''') 
     #################         Input section for each guess and extra info
-    guess = st.text_input(f"{answer}: The answer has {word_length} letters and you have {remaining_attempts} attempts to guess the correct word in {time_limit} seconds. Good luck!", max_chars=word_length).lower()
+    guess = st.text_input(f"The answer has {word_length} letters and you have {remaining_attempts} attempts to guess the correct word in {time_limit} seconds. Good luck!", max_chars=word_length).lower()
          
 
 
