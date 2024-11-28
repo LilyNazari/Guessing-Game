@@ -249,12 +249,9 @@ with tab2:
         scores = [game["score"] for game in st.session_state.game_history]
         st.bar_chart(scores)
 
-        # 5. Average attempt
+        # 5.  attempts
         
         attempts = [game.get("attempt",0) for game in st.session_state.game_history] 
-        sum_attempts = sum(attempts)
-        avg_attempts = sum_attempts  / len(st.session_state.game_history)
-        st.write(f"Average attempts: **{avg_attempts:.2f}**")
         st.line_chart(attempts)
 
     else:
