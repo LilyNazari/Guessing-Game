@@ -1,1 +1,2 @@
 streamlit
+nltk==3.7
